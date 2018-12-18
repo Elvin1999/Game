@@ -43,8 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="\\ITSTEP\desktop redirection%24\Jama_yw17\Desktop\Game.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -89,7 +89,6 @@ namespace ConsoleApp12
             return new Soldier(100);
         }
     }
-
     class Game
     {
         List<IUnit> myarmy = new List<IUnit>();
@@ -105,7 +104,6 @@ namespace ConsoleApp12
             {
                 item.ShowUnit();
                 Console.WriteLine();
-
             }
         }
         public int GetGameMode()
@@ -119,14 +117,42 @@ namespace ConsoleApp12
             Console.Clear();
             return selection;
         }
+        public int GetRandomArmyMember()
+        {
+            Random random = new Random();
+            var membernumber = random.Next(0, myarmy.Count);
+            return membernumber;
+        }
+        public void AttackToOpponent()
+        {
+            int index = GetRandomArmyMember();
+            opponentarmy.RemoveAt(index);
+            Console.Clear();
+            ShowGame();
+        }
+        public void AttackFromOpponent()
+        {
+            int index = GetRandomArmyMember();
+            index = GetRandomArmyMember();
+            myarmy.RemoveAt(index);
+        }
+        public void ShowGame()
+        {
+            Console.WriteLine("        ===My army===           ");
+            ShowArmy(myarmy);
+            Console.WriteLine("      ===Opponent army===       ");
+            ShowArmy(opponentarmy);
+        }
         public void Run()
         {
+            //my army
             SoldierFactory soldier = new SoldierFactory();
             TankFactory tank = new TankFactory();
             HelicopterFactory helicopter = new HelicopterFactory();
             var mysoldier = GetUnit(soldier);
             var mytank = GetUnit(tank);
             var myhecilopter = GetUnit(helicopter);
+            //opponent army
             SoldierFactory osoldier = new SoldierFactory();
             TankFactory otank = new TankFactory();
             HelicopterFactory ohelicopter = new HelicopterFactory();
@@ -136,28 +162,87 @@ namespace ConsoleApp12
             var mode = GetGameMode();
             if (mode == 1)
             {
-                myarmy.Add(mysoldier); myarmy.Add(mytank); myarmy.Add(myhecilopter);
-                opponentarmy.Add(opsoldier); opponentarmy.Add(ophecilopter); opponentarmy.Add(optank);
+                myarmy.Add(mysoldier);
+                myarmy.Add(mytank);
+                myarmy.Add(myhecilopter);
+                opponentarmy.Add(opsoldier);
+                opponentarmy.Add(ophecilopter);
+                opponentarmy.Add(optank);
             }
             else if (mode == 2)
             {
-                myarmy.Add(mysoldier);
-                myarmy.Add(mysoldier);
-                myarmy.Add(mytank);
-                myarmy.Add(mytank);
-                myarmy.Add(myhecilopter);
-                myarmy.Add(myhecilopter);
-                opponentarmy.Add(opsoldier); opponentarmy.Add(opsoldier);
-                opponentarmy.Add(ophecilopter); opponentarmy.Add(ophecilopter);
-                opponentarmy.Add(optank); opponentarmy.Add(optank);
+                for (int i = 0; i < 3; i++)
+                {
+                    myarmy.Add(mysoldier);
+                    myarmy.Add(mytank);
+                    myarmy.Add(myhecilopter);
+                    opponentarmy.Add(opsoldier);
+                    opponentarmy.Add(ophecilopter);
+                    opponentarmy.Add(optank);
+                }
             }
-            Console.WriteLine("        ===My army===           ");
-            ShowArmy(myarmy);
-            Console.WriteLine("      ===Opponent army===       ");
-            ShowArmy(opponentarmy);
-            //mysoldier.Attact();
-            //mytank.Attact();
-            //myhecilopter.Attact();
+            ShowGame();
+            Console.WriteLine("To attack select [1]");
+            int select = Convert.ToInt32(Console.ReadLine());
+
+            if (select == 1)
+            {
+                AttackToOpponent();
+                System.Threading.Thread.Sleep(1000);
+                AttackFromOpponent();
+            }
+            Console.Clear();
+            ShowGame();
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Opponent attacked to you");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("GO TO THE NEXT LEVEL select [2]");
+            select = Convert.ToInt32(Console.ReadLine());
+            if (select == 2)
+            {
+                opponentarmy.Clear();
+                myarmy.Clear();
+                if (mode == 1)
+                {
+                    for (int i = 0; i < 2; i++)
+                    {
+                        myarmy.Add(mysoldier);
+                        myarmy.Add(mytank);
+                        myarmy.Add(myhecilopter);
+                        opponentarmy.Add(opsoldier);
+                        opponentarmy.Add(ophecilopter);
+                        opponentarmy.Add(optank);
+                    }
+                }
+                else if (mode == 2)
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        myarmy.Add(mysoldier);
+                        myarmy.Add(mytank);
+                        myarmy.Add(myhecilopter);
+                        opponentarmy.Add(opsoldier);
+                        opponentarmy.Add(ophecilopter);
+                        opponentarmy.Add(optank);
+                    }
+                }
+                Console.Clear();
+                ShowGame();
+                Console.WriteLine("To attack select [1]");
+                select = Convert.ToInt32(Console.ReadLine());
+
+                if (select == 1)
+                {
+                    AttackToOpponent();
+                    System.Threading.Thread.Sleep(1000);
+                    AttackFromOpponent();
+                }
+                Console.Clear();
+                ShowGame();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Opponent attacked to you");
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
         }
     }
     class Program
@@ -165,18 +250,6 @@ namespace ConsoleApp12
         static void Main(string[] args)
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            int x = 0; int y = 0;
-            //while (true)
-            //{
-            //    Console.Clear();
-
-            //    Console.SetCursorPosition(x, y);
-            //    Console.WriteLine("*");
-            //    System.Threading.Thread.Sleep(1000);
-            //    ++x;
-
-            //}
-
             var game = new Game();
             game.Run();
         }
